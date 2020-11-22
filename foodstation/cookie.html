@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<style>
+    body{
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+    h1{
+        color: maroon;
+    }
+    p{
+        color: red;
+    }
+h1,p{
+  text-align:center;
+}
+#show{
+    border:1px solid black;
+    color: darkblue;
+    font-weight: bold;
+}
+table,th,td {
+    background-color: blueviolet;
+  border : 2px solid black;
+   margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+}
+th,td {
+  padding: 10px;
+}
+</style>
+<body>
+<h1></h1>
+<p>Click on the Package to view it </p>
+<table id="demo"></table>
+<p id='show'></p>
+<select id="dem" onchange="show()">
+        <option value="Select Color">Select Color</option>
+        <option value="yellow">Yellow</option>
+        <option value="pink">Pink</option>
+        <option value="orange">Orange</option>
+        <option value="green">Green</option>
+    </select>
+<script>
+var x,xmlhttp,xmlDoc
+xmlhttp = new XMLHttpRequest();
+xmlhttp.open("GET", "pricing.xml", false);
+xmlhttp.send();
+xmlDoc = xmlhttp.responseXML;
+x = xmlDoc.getElementsByTagName("pricing");
+table="<tr><th>Plans</th><th>pricing</th><th>offers</th></tr>";
+for (i = 0; i <x.length; i++) {
+  table += "<tr onclick='showDetails(" + i + ")'><td>";
+  table += x[i].getElementsByTagName("Plans")[0].childNodes[0].nodeValue;
+  table += "</td><td>";
+  table +=  x[i].getElementsByTagName("pricing")[0].childNodes[0].nodeValue;
+  table += "</td><td>";
+  table += x[i].getElementsByTagName("offers")[0].childNodes[0].nodeValue;
+  table += "</td></tr>";
+}
+document.getElementById("demo").innerHTML = table;
+
+function showDetails(i) {
+  document.getElementById("show").innerHTML =
+  "Plans:" +
+  x[i].getElementsByTagName("Plans")[0].childNodes[0].nodeValue +
+  "<br>category: " +
+  x[i].getElementsByTagName("category")[0].childNodes[0].nodeValue +
+  "<br>offers " +
+  x[i].getElementsByTagName("offers")[0].childNodes[0].nodeValue +
+  "<br>pricing " +
+  x[i].getElementsByTagName("pricing")[0].childNodes[0].nodeValue;
+  
+}
+
+        function show()
+        {
+            var value=document.getElementById("dem").value;
+            if(value!="Change Color")
+            {
+                document.bgColor=value;
+                document.cookie="color="+value+";expires=Fri,1 Aug 1970 01:00:00 UTC;";
+            }
+        }
+        window.onload=function()
+        {
+            if(document.cookie.length!=0)
+            {
+                var a=document.cookie.split("=");
+                document.getElementById("dem").value=a[1];
+                document.bgColor=a[1];
+            }
+        }
+    </script>
+
+</body>
+</html>
